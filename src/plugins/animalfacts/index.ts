@@ -15,13 +15,15 @@ const formatFactResponse = (fact: { text: string; source?: string; length?: numb
 
 export default definePlugin({
     name: "AnimalFacts",
-    description: "Adds the catfact and dogfact commands",
-    author: [Contributors.jdev082],
+    description: "Adds miscellaneous animal fact commands",
+    author: [Contributors.jdev082, Contributors.baxter],
     id: "animalfacts",
     version: "1.0.0",
     start() {
         unregisters.push(registerCommand(catFactCommand()));
         unregisters.push(registerCommand(dogFactCommand()));
+        unregisters.push(registerCommand(duckFactCommand()));
+        unregisters.push(registerCommand(foxFactCommand()));
     },
     stop() {
         unregisters.forEach(unregister => unregister());
@@ -84,11 +86,83 @@ const dogFactCommand = (): RainApplicationCommand => ({
     },
 });
 
+const duckFactCommand = (): RainApplicationCommand => ({
+    name: "duckfact",
+    displayName: "duckfact",
+    description: "Sends a duck fact.",
+    displayDescription: "Sends a duck fact.",
+    applicationId: "-1",
+    inputType: 1,
+    type: 1,
+    shouldHide: () => false,
+    execute: async (args, ctx) => {
+        try {
+            const fact = await duckFact();
+            const fixNonce = Date.now().toString();
+
+            MessageActions.sendMessage(
+                ctx.channel.id,
+                { content: formatFactResponse(fact) },
+                void 0,
+                { nonce: fixNonce }
+            );
+        } catch (error) {
+            console.error("[DuckFact] Error:", error);
+            // Show toast on error
+            showToast("Failed to fetch duck fact", 3000);
+        }
+    },
+});
+
+const foxFactCommand = (): RainApplicationCommand => ({
+    name: "foxfact",
+    displayName: "foxfact",
+    description: "Sends a fox fact.",
+    displayDescription: "Sends a fox fact.",
+    applicationId: "-1",
+    inputType: 1,
+    type: 1,
+    shouldHide: () => false,
+    execute: async (args, ctx) => {
+        try {
+            const fact = await foxFact();
+            const fixNonce = Date.now().toString();
+
+            MessageActions.sendMessage(
+                ctx.channel.id,
+                { content: formatFactResponse(fact) },
+                void 0,
+                { nonce: fixNonce }
+            );
+        } catch (error) {
+            console.error("[FoxFact] Error:", error);
+            // Show toast on error
+            showToast("Failed to fetch fox fact", 3000);
+        }
+    },
+});
+
 export const dogFact = async () => {
     const response = await fetch("https://dogapi.dog/api/v2/facts?limit=1");
     const resp = await response.json();
     return {
         text: resp.data["0"].attributes.body,
+    };
+};
+
+export const duckFact = async () => {
+    const response = await fetch("https://03vpefsitf.execute-api.eu-west-1.amazonaws.com/prod/");
+    const resp = await response.json();
+    return {
+        text: resp.fact,
+    };
+};
+
+export const foxFact = async () => {
+    const response = await fetch("https://api.some-random-api.com/animal/fox");
+    const resp = await response.json();
+    return {
+        text: resp.fact,
     };
 };
 
