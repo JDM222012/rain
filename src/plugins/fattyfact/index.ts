@@ -43,7 +43,7 @@ const fatFactCommand = (): RainApplicationCommand => ({
 
             MessageActions.sendMessage(
                 ctx.channel.id,
-                { content: ` <@807170846497570848> ${fact.text}` },
+                { content: `<@807170846497570848> <@923212189123346483> ${fact.text}` },
                 void 0,
                 { nonce: fixNonce }
             );
