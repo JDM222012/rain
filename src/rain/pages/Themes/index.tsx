@@ -10,6 +10,7 @@ import {
     TableRowGroup,
     TableRowIcon,
     TableSwitchRow,
+    RowButton,
 } from "@metro/common/components";
 import initPlus from "@plugins/_core/painter/plus/stuff/loader";
 import { getCurrentTheme, installTheme, ThemeInfo,useThemes } from "@plugins/_core/painter/themes";
@@ -110,7 +111,7 @@ export default function Themes() {
                                         }
                                     }}
                                 />
-                                <TableSwitchRow
+                                <RowButton
                                     label={Strings.USE_CUSTOM_ICONS}
                                     subLabel={Strings.USE_CUSTOM_ICONS_DESC}
                                     icon={<TableRowIcon source={findAssetId("PlusSmallIcon")} />}
